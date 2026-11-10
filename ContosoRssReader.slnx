@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/ContosoRssReader.Api/ContosoRssReader.Api.csproj" />
+  </Folder>
+  <Folder Name="/frontend/">
+    <Project Path="frontend/ContosoRssReader.UI/ContosoRssReader.UI.csproj" />
+  </Folder>
+</Solution>

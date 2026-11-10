@@ -1,0 +1,28 @@
+# .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+*.log
+
+# Rider / VS / VS Code
+.vscode/
+.idea/
+*.sln.iml
+*.userprefs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment and build outputs
+packages/
+TestResults/
+coverage/
+
+# Node/JS (not required for this repo, but safe)
+node_modules/
+dist/
+build/

@@ -1,0 +1,97 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Subscriptions</PageTitle>
+
+<h1>Subscriptions</h1>
+
+<div>
+    <input @bind="newUrl" type="text" placeholder="Enter a feed URL" style="width: 320px; margin-right: 0.5rem;" />
+    <button @onclick="AddSubscriptionAsync" disabled="@isSubmitting">Add Subscription</button>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <p style="color: darkred; margin-top: 0.75rem;">@errorMessage</p>
+}
+
+@if (subscriptions.Count == 0)
+{
+    <p style="margin-top: 1rem;">No subscriptions yet.</p>
+}
+else
+{
+    <ul style="margin-top: 1rem;">
+        @foreach (var subscription in subscriptions)
+        {
+            <li>@subscription.Url</li>
+        }
+    </ul>
+}
+
+@code {
+    private string newUrl = string.Empty;
+    private string errorMessage = string.Empty;
+    private bool isSubmitting;
+    private List<SubscriptionItem> subscriptions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSubscriptionsAsync();
+    }
+
+    private async Task AddSubscriptionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(newUrl))
+        {
+            errorMessage = "Please enter a feed URL.";
+            return;
+        }
+
+        isSubmitting = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("subscriptions", new { url = newUrl.Trim() });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorMessage = "The subscription could not be added.";
+                return;
+            }
+
+            newUrl = string.Empty;
+            await LoadSubscriptionsAsync();
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task LoadSubscriptionsAsync()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<SubscriptionListResponse>("subscriptions");
+            subscriptions = result?.Subscriptions ?? new List<SubscriptionItem>();
+        }
+        catch
+        {
+            subscriptions = new List<SubscriptionItem>();
+        }
+    }
+
+    private sealed class SubscriptionListResponse
+    {
+        public List<SubscriptionItem> Subscriptions { get; set; } = new();
+    }
+
+    private sealed class SubscriptionItem
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
+        public DateTimeOffset CreatedAt { get; set; }
+    }
+}
