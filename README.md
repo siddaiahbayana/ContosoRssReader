@@ -1,4 +1,4 @@
-Here is a professional and structured project description for your ContosoRssReader repository that you can add to your README.md:
+
 ContosoRssReader
 Overview
 ContosoRssReader is a lightweight, modern RSS subscription management application designed to handle subscription lists efficiently with an intuitive workflow. Built as part of a development and architecture lab, this project emphasizes clean separation of concerns, robust tooling, and rapid implementation using .NET and modern CLI workflows.
